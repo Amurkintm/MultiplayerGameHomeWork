@@ -38,7 +38,9 @@ export default Arena({
         });
 
         // Define "state_handler" room
-        gameServer.define("state_handler", StateHandlerRoom)
+        // Определяем комнату с настройками
+        gameServer.define('state_handler', StateHandlerRoom)
+            // Настройки комнаты можно задать здесь
             .enableRealtimeListing();
 
         // Define "auth" room
@@ -68,12 +70,20 @@ export default Arena({
 
         // (optional) attach web monitoring panel
         app.use('/colyseus', monitor());
+        // Настройка Express routes
+        app.get("/", (req, res) => {
+            res.send("Game server is running!");
+        });
+
+        // Colyseus monitor (для отладки)
+        app.use("/colyseus", monitor());
     },
 
 
     beforeListen: () => {
+        console.log("Game server is starting...");
         /**
          * Before before gameServer.listen() is called.
          */
     }
-});
+}); 

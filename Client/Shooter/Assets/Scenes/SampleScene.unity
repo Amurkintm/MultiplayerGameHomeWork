@@ -525,8 +525,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MultiplayerManager
   _colyseusSettings: {fileID: 11400000, guid: 46461d3fc9952504a93e4eaabfca1298, type: 2}
-  _player: {fileID: 8065371075088780573, guid: ced2c097a54452e45b4e523d393cf052, type: 3}
-  _enemy: {fileID: 934833912826414087, guid: db999439a93198444a7a1d2d868e5d12, type: 3}
+  _networkUpdateRate: 0.04
+  _positionSyncRate: 0.1
+  _enableInterpolation: 1
+  _playerPrefab: {fileID: 8065371075088780573, guid: ced2c097a54452e45b4e523d393cf052, type: 3}
+  _enemyPrefab: {fileID: 934833912826414087, guid: db999439a93198444a7a1d2d868e5d12, type: 3}
 --- !u!4 &1244559731
 Transform:
   m_ObjectHideFlags: 0

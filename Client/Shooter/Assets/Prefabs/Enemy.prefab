@@ -171,3 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0563db3965a38204fba94a7dfebaa90d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
+  _interpolationSpeed: 6
+  _predictionTime: 0.12
+  _maxCorrectionDistance: 2
+  _smoothCorrectionSpeed: 4
