@@ -10,7 +10,7 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager>
     private ColyseusRoom<State> _room;
 
     protected override void Awake() {
-        base.Awake();
+        base.Awake();        
         Instance.InitializeClient();
         Connect();
     }

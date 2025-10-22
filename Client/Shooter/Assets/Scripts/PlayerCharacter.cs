@@ -6,9 +6,13 @@ public class PlayerCharacter : MonoBehaviour
     [SerializeField] private float _speed = 2f;
     [SerializeField] private Transform _head;
     [SerializeField] private Transform _cameraPoint;
+    [SerializeField] private float _maxHeadAngle = 90f;
+    [SerializeField] private float _minHeadAngle = -90f;
     private float _inputH;
     private float _inputV;
     private float _rotateY;
+    private float _currentRotateX = 0f;
+    
     private void Start() {
         _rigidbody = GetComponent<Rigidbody>();
         Transform camera = Camera.main.transform;
@@ -20,7 +24,7 @@ public class PlayerCharacter : MonoBehaviour
         _inputH = h;
         _inputV = v;
         _rotateY += rotateY;
-    }
+    }    
     private void FixedUpdate() {
         Move();
         RotateY();
@@ -33,7 +37,9 @@ public class PlayerCharacter : MonoBehaviour
         _rigidbody.linearVelocity = velocity;
     }
     public void RotateX(float value) {
-        _head.Rotate(value, 0, 0);
+        _currentRotateX = Mathf.Clamp(_currentRotateX + value, _minHeadAngle, _maxHeadAngle);
+        _head.localEulerAngles = new Vector3(_currentRotateX, 0, 0);
+        //_head.Rotate(value,0,0);
     }
     public void RotateY() {
         _rigidbody.angularVelocity = new Vector3(0, _rotateY, 0);
