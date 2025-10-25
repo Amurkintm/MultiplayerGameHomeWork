@@ -3,6 +3,9 @@ import { Schema, type, MapSchema } from "@colyseus/schema";
 
 export class Player extends Schema {
     @type("number")
+    speed = 0;
+
+    @type("number")
     pX = Math.floor(Math.random() * 50) -25;
 
     @type("number")
@@ -12,13 +15,19 @@ export class Player extends Schema {
     pZ = Math.floor(Math.random() * 50) -25;
 
     @type("number")
-    vX = 0
+    vX = 0;
 
     @type("number")
     vY = 0;
 
     @type("number")
-    vZ = 0
+    vZ = 0;
+
+    @type("number")
+    rX = 0;
+
+    @type("number")
+    rY = 0;   
 
 }
 
@@ -28,8 +37,11 @@ export class State extends Schema {
 
     something = "This attribute won't be sent to the client-side";
 
-    createPlayer(sessionId: string) {
-        this.players.set(sessionId, new Player());
+    createPlayer(sessionId: string, data: any) {
+        const player = new Player();
+        player.speed = data.speed;
+
+        this.players.set(sessionId, player);
     }
 
     removePlayer(sessionId: string) {
@@ -37,12 +49,15 @@ export class State extends Schema {
     }
 
     movePlayer (sessionId: string, data: any) {
-        this.players.get(sessionId).pX = data.pX;
-        this.players.get(sessionId).pY = data.pY;
-        this.players.get(sessionId).pZ = data.pZ;
-        this.players.get(sessionId).vX = data.vX;
-        this.players.get(sessionId).vY = data.vY;
-        this.players.get(sessionId).vZ = data.vZ;             
+        const player = this.players.get(sessionId);
+        player.pX = data.pX;
+        player.pY = data.pY;
+        player.pZ = data.pZ;
+        player.vX = data.vX;
+        player.vY = data.vY;
+        player.vZ = data.vZ;
+        player.rX = data.rX;
+        player.rY = data.rY;             
     }
 }
 
@@ -64,9 +79,9 @@ export class StateHandlerRoom extends Room<State> {
         return true;
     }
 
-    onJoin (client: Client) {
+    onJoin (client: Client, data: any) {
         client.send("hello", "world");
-        this.state.createPlayer(client.sessionId);
+        this.state.createPlayer(client.sessionId, data);
     }
 
     onLeave (client) {
@@ -76,5 +91,4 @@ export class StateHandlerRoom extends Room<State> {
     onDispose () {
         console.log("Dispose StateHandlerRoom");
     }
-
 }

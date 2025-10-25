@@ -21,8 +21,11 @@ public class Controller : MonoBehaviour
             float mouseX = Input.GetAxis("Mouse X");
             float mouseY = Input.GetAxis("Mouse Y");
 
+            bool space = Input.GetKeyDown(KeyCode.Space);
+
             _player.SetInput(h, v, mouseX * _mouseSensetivity);
             _player.RotateX(mouseY * -_mouseSensetivity);
+            if (space) _player.Jump();
             SendMove();
         } else {
             Cursor.lockState = CursorLockMode.None;
@@ -32,7 +35,7 @@ public class Controller : MonoBehaviour
     }
 
     private void SendMove() {
-        _player.GetMoveInfo(out Vector3 position, out Vector3 velocity);
+        _player.GetMoveInfo(out Vector3 position, out Vector3 velocity, out float rotateX, out float rotateY);
 
         Dictionary<string, object> data = new Dictionary<string, object>()
         {
@@ -41,7 +44,9 @@ public class Controller : MonoBehaviour
             {"pZ", position.z},
             {"vX", velocity.x},
             {"vY", velocity.y},
-            {"vZ", velocity.z}
+            {"vZ", velocity.z},
+            {"rX", rotateX},
+            {"rY", rotateY}
         };
         MultiplayerManager.Instance.SendMessàge("move", data);
     }

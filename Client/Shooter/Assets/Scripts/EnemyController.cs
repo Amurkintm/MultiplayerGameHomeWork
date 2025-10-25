@@ -1,11 +1,11 @@
 using Colyseus.Schema;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class EnemyController : MonoBehaviour
 {
-    [SerializeField] private EnemyCharacter _enemyCharacter;
+    [SerializeField] private EnemyCharacter _character;
     private List<float> _receiveTimeInterval = new List<float> { 0, 0, 0, 0, 0 };
     private float AverageInterval {
         get
@@ -19,6 +19,17 @@ public class EnemyController : MonoBehaviour
         }
     }
     private float _lastReceiveTime = 0;
+    private Player _player;
+
+    public void Init(Player player) {
+        _player = player;
+        _character.SetSpeed(player.speed);
+        player.OnChange += OnChange;
+    }
+    public void Destroy() {
+        _player.OnChange -= OnChange;
+        Destroy(gameObject);
+    }
     private void SaveReceiveTime() {
         float interval = Time.time - _lastReceiveTime;
         _lastReceiveTime = Time.time;
@@ -29,8 +40,8 @@ public class EnemyController : MonoBehaviour
 
         SaveReceiveTime();
 
-        Vector3 position = _enemyCharacter.TargetPosition;
-        Vector3 velocity = Vector3.zero;
+        Vector3 position = transform.position;
+        Vector3 velocity = _character.velocity;
         foreach (var dataChange in changes) {
             switch (dataChange.Field) {
                 case "pX":
@@ -51,12 +62,18 @@ public class EnemyController : MonoBehaviour
                 case "vZ":
                     velocity.z = (float)dataChange.Value;
                     break;
+                case "rX":
+                    _character.SetRotateX ((float)dataChange.Value);
+                    break;
+                case "rY":
+                    _character.SetRotateY ((float)dataChange.Value);
+                    break;
                 default:
                     Debug.LogWarning("Не обрабатывается изменение поля" + dataChange.Field);
                     break;
 
             }
         }
-        _enemyCharacter.SetMovement(position, velocity, AverageInterval);
+        _character.SetMovement(position, velocity, AverageInterval);
     }
 }
