@@ -7,7 +7,6 @@ public class EnemyController : MonoBehaviour
 {
     [SerializeField] private EnemyCharacter _character;
     [SerializeField] private EnemyGun _gun;
-    private bool _isCrouching = false;
     private List<float> _receiveTimeInterval = new List<float> { 0, 0, 0, 0, 0 };
     private float AverageInterval {
         get
@@ -17,7 +16,7 @@ public class EnemyController : MonoBehaviour
             for (int i = 0; i < receiveTimeIntervalCount; i++) {
                 summ += _receiveTimeInterval[i];
             }
-            return summ / receiveTimeIntervalCount;
+            return summ;
         }
     }
     private float _lastReceiveTime = 0;
@@ -26,8 +25,6 @@ public class EnemyController : MonoBehaviour
     public void Init(Player player) {
         _player = player;
         _character.SetSpeed(player.speed);
-        // Устанавливаем начальное состояние приседания при инициализации из схемы
-        _character.SetCrouching(player.isCrouching); // Вызов метода в EnemyCharacter
         player.OnChange += OnChange;
     }
     public void Shoot(in ShootInfo info) {
@@ -43,9 +40,7 @@ public class EnemyController : MonoBehaviour
         float interval = Time.time - _lastReceiveTime;
         _lastReceiveTime = Time.time;
         _receiveTimeInterval.Add(interval);
-        if (_receiveTimeInterval.Count > 5) { // Убедимся, что список не растёт бесконечно
-            _receiveTimeInterval.RemoveAt(0);
-        }
+        _receiveTimeInterval.RemoveAt(0);
     }
     internal void OnChange(List<DataChange> changes) {
 
@@ -79,13 +74,6 @@ public class EnemyController : MonoBehaviour
                 case "rY":
                     _character.SetRotateY ((float)dataChange.Value);
                     break;
-                case "isCrouching": // Обработка изменения isCrouching
-                    if (dataChange.Value is bool crouchVal) {
-                        _character.SetCrouching(crouchVal); // Вызов метода в EnemyCharacter
-                        //isCrouchingChanged = true;
-                        //newCrouchingValue = crouchVal;
-                    }
-                    break;
                 default:
                     Debug.LogWarning("Не обрабатывается изменение поля" + dataChange.Field);
                     break;
@@ -93,8 +81,5 @@ public class EnemyController : MonoBehaviour
             }
         }
         _character.SetMovement(position, velocity, AverageInterval);
-    }
-    public void SetCrouching(bool isCrouching) { // Добавлено
-        _isCrouching = isCrouching;
     }
 }

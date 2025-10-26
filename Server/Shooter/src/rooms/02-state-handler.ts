@@ -28,8 +28,6 @@ export class Player extends Schema {
 
     @type("number")
     rY = 0;   
-
-    @type("boolean") isCrouching = false; // По умолчанию не присевший
 }
 
 export class State extends Schema {
@@ -58,11 +56,7 @@ export class State extends Schema {
         player.vY = data.vY;
         player.vZ = data.vZ;
         player.rX = data.rX;
-        player.rY = data.rY;
-        // Обновляем состояние приседания ИЗ ДАННЫХ ДВИЖЕНИЯ
-            if (data.isCrouching !== undefined && typeof data.isCrouching === 'boolean') {
-                 player.isCrouching = data.isCrouching;
-        }             
+        player.rY = data.rY;             
     }
 }
 

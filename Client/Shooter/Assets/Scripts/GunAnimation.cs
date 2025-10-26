@@ -4,7 +4,6 @@ using UnityEngine;
 public class GunAnimation : MonoBehaviour
 {
     private const string shoot = "Shoot";
-    
 
     [SerializeField] private Gun _gun;
     [SerializeField] private Animator _animator;

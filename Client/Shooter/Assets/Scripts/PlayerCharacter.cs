@@ -10,9 +10,6 @@ public class PlayerCharacter : Character
     [SerializeField] private float _jumpForce = 50f;
     [SerializeField] private CheckFly _checkFly;
     [SerializeField] private float _jumpDelay = .2f;
-    
-    private bool _isCrouching = false;
-
     private float _inputH;
     private float _inputV;
     private float _rotateY;
@@ -26,11 +23,10 @@ public class PlayerCharacter : Character
         camera.localPosition = Vector3.zero;
         camera.localRotation = Quaternion.identity;
     }
-    public void SetInput(float h, float v, float rotateY, bool isCrouchingInput = false) {
+    public void SetInput(float h, float v, float rotateY) {
         _inputH = h;
         _inputV = v;
         _rotateY += rotateY;
-        _isCrouching = isCrouchingInput;
     }    
     private void FixedUpdate() {
         Move();
@@ -71,7 +67,5 @@ public class PlayerCharacter : Character
         _jumpTime = Time.time;
         _rigidbody.AddForce(0, _jumpForce, 0, ForceMode.VelocityChange);
     }
-
-    //public bool GetIsCrouching() => _isCrouching;
 
 }
