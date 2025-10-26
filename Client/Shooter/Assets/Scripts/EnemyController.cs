@@ -6,6 +6,7 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] private EnemyCharacter _character;
+    [SerializeField] private EnemyGun _gun;
     private List<float> _receiveTimeInterval = new List<float> { 0, 0, 0, 0, 0 };
     private float AverageInterval {
         get
@@ -25,6 +26,11 @@ public class EnemyController : MonoBehaviour
         _player = player;
         _character.SetSpeed(player.speed);
         player.OnChange += OnChange;
+    }
+    public void Shoot(in ShootInfo info) {
+        Vector3 position = new Vector3(info.pX, info.pY, info.pZ);
+        Vector3 velocity = new Vector3(info.dX, info.dY, info.dZ);
+        _gun.Shoot(position, velocity);
     }
     public void Destroy() {
         _player.OnChange -= OnChange;
@@ -69,7 +75,7 @@ public class EnemyController : MonoBehaviour
                     _character.SetRotateY ((float)dataChange.Value);
                     break;
                 default:
-                    Debug.LogWarning("Не обрабатывается изменение поля" + dataChange.Field);
+                    Debug.LogWarning("РќРµ РѕР±СЂР°Р±Р°С‚С‹РІР°РµС‚СЃСЏ РёР·РјРµРЅРµРЅРёРµ РїРѕР»СЏ" + dataChange.Field);
                     break;
 
             }

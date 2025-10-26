@@ -17,7 +17,7 @@ public class PlayerCharacter : Character
     private float _jumpTime;
     
     private void Start() {
-        _rigidbody = GetComponent<Rigidbody>();
+        //_rigidbody = GetComponent<Rigidbody>();
         Transform camera = Camera.main.transform;
         camera.parent = _cameraPoint;
         camera.localPosition = Vector3.zero;
