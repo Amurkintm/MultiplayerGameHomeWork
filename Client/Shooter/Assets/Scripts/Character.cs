@@ -6,8 +6,8 @@ public abstract class Character : MonoBehaviour
     public Vector3 velocity { get; protected set; }
 
     [SerializeField] protected CapsuleCollider _collider;
-    [SerializeField] protected Vector3 _colliderCenterCrouch = new Vector3(0, .65f, 0);
-    [SerializeField] protected float _colliderHeightCrouch = 1.1f;
+    [SerializeField] protected Vector3 _colliderCenterCrouch = new Vector3(0, .5f, 0);
+    [SerializeField] protected float _colliderHeightCrouch = 1f;
     protected Vector3 _colliderCenterStand;
     protected float _colliderHeightStand;
     public bool IsCrouching { get; protected set; } = false;
@@ -23,6 +23,6 @@ public abstract class Character : MonoBehaviour
             _collider.height = _colliderHeightStand;
         }
 
-        IsCrouching = isCrouching;
+        isCrouching = IsCrouching;
     }
 }

@@ -34,7 +34,7 @@ public class Controller : MonoBehaviour
 
             bool space = Input.GetKeyDown(KeyCode.Space);
 
-            _isCrouching = Input.GetKey(KeyCode.LeftControl);
+            bool isCrouching = Input.GetKey(KeyCode.LeftControl);
 
             _player.SetInput(h, v, mouseX * _mouseSensetivity);
             _player.RotateX(mouseY * -_mouseSensetivity);
