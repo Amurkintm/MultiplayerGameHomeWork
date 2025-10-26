@@ -22,6 +22,9 @@ public class PlayerCharacter : Character
         camera.parent = _cameraPoint;
         camera.localPosition = Vector3.zero;
         camera.localRotation = Quaternion.identity;
+
+        _colliderCenterStand = _collider.center;
+        _colliderHeightStand = _collider.height;
     }
     public void SetInput(float h, float v, float rotateY) {
         _inputH = h;
@@ -53,12 +56,14 @@ public class PlayerCharacter : Character
     }
 
 
-    public void GetMoveInfo(out Vector3 position, out Vector3 velocity, out float rotateX, out float rotateY) {
+    public void GetMoveInfo(out Vector3 position, out Vector3 velocity, out float rotateX, out float rotateY, out bool isCrouching) {
         position = transform.position;
         velocity = _rigidbody.linearVelocity;
 
         rotateX = _head.localEulerAngles.x;
-        rotateY = transform.eulerAngles.y; 
+        rotateY = transform.eulerAngles.y;
+
+        isCrouching = IsCrouching;
     }
     
     public void Jump() {

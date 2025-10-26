@@ -16,7 +16,7 @@ public class EnemyController : MonoBehaviour
             for (int i = 0; i < receiveTimeIntervalCount; i++) {
                 summ += _receiveTimeInterval[i];
             }
-            return summ;
+            return summ / receiveTimeIntervalCount; 
         }
     }
     private float _lastReceiveTime = 0;
@@ -73,6 +73,9 @@ public class EnemyController : MonoBehaviour
                     break;
                 case "rY":
                     _character.SetRotateY ((float)dataChange.Value);
+                    break;
+                case "crouch":
+                    _character.Crouching((bool)dataChange.Value);
                     break;
                 default:
                     Debug.LogWarning("Не обрабатывается изменение поля" + dataChange.Field);

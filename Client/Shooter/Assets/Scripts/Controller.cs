@@ -10,6 +10,7 @@ public class Controller : MonoBehaviour
     [SerializeField] private float _mouseSensetivity = 2f;
     private MultiplayerManager _multiplayerManager;
     bool _isEscOn = false;
+    bool _isCrouching = false;
 
     private void Start() {
         _multiplayerManager = MultiplayerManager.Instance;
@@ -33,6 +34,8 @@ public class Controller : MonoBehaviour
 
             bool space = Input.GetKeyDown(KeyCode.Space);
 
+            _isCrouching = Input.GetKey(KeyCode.LeftControl);
+
             _player.SetInput(h, v, mouseX * _mouseSensetivity);
             _player.RotateX(mouseY * -_mouseSensetivity);
             if (space) _player.Jump();
@@ -52,7 +55,7 @@ public class Controller : MonoBehaviour
     }
 
     private void SendMove() {
-        _player.GetMoveInfo(out Vector3 position, out Vector3 velocity, out float rotateX, out float rotateY);
+        _player.GetMoveInfo(out Vector3 position, out Vector3 velocity, out float rotateX, out float rotateY, out bool isCrouching);
         Dictionary<string, object> data = new Dictionary<string, object>()
         {
             {"pX", position.x},
@@ -62,7 +65,8 @@ public class Controller : MonoBehaviour
             {"vY", velocity.y},
             {"vZ", velocity.z},
             {"rX", rotateX},
-            {"rY", rotateY}
+            {"rY", rotateY},
+            {"crouch", isCrouching }
         };
         _multiplayerManager.SendMessаge("move", data);
     }
