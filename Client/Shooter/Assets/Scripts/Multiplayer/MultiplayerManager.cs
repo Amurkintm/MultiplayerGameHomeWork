@@ -1,6 +1,8 @@
 using Colyseus;
+using Colyseus.Schema;
 using System;
 using System.Collections.Generic;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
 public class MultiplayerManager : ColyseusManager<MultiplayerManager>
@@ -48,6 +50,16 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager>
 
         _room.State.players.OnAdd += CreateEnemy;
         _room.State.players.OnRemove += RemoveEnemy;
+        // Подписываемся на изменения у ВСЕХ игроков (включая нового при OnAdd)
+        // Это нужно для синхронизации isCrouching и других полей
+        _room.State.players.ForEach((key, player) =>
+        {
+            player.OnChange += (changes) => OnPlayerChange(key, changes);
+        });
+
+        _room.State.players.OnAdd += (player, key) => {
+            player.OnChange += (changes) => OnPlayerChange(key, changes);
+        };
     }
     private void CreatePlayer(Player player) {
         var position = new Vector3(player.pX, player.pY, player.pZ);
@@ -60,6 +72,8 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager>
 
         var enemy = Instantiate(_enemy, position, Quaternion.identity);
         enemy.Init(player);
+        // Устанавливаем начальное состояние приседания при создании, используя значение из схемы
+        enemy.SetCrouching(player.isCrouching); // Вызов метода в EnemyController
 
         _enemies.Add(key, enemy);
     }
@@ -87,4 +101,25 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager>
         _room.Send(key, data);
     }
     public string GetSessionID() => _room.SessionId;
+
+    // Новый метод для обработки изменений в данных конкретного игрока (включая isCrouching)
+    private void OnPlayerChange(string key, List<DataChange> changes) {
+        foreach (var change in changes) {
+            if (change.Field == "isCrouching" && change.Value is bool isCrouchingValue) {
+                if (key == _room.SessionId) {
+                    // Это наше собственное изменение, синхронизированное сервером
+                    // Обычно можно игнорировать, но если нужно обновить локально из синхронизированного состояния:
+                    // _player.SetCrouching(isCrouchingValue); // У PlayerCharacter нет SetCrouching, только SetInput
+                    // Локальное состояние _isCrouching в PlayerCharacter обновляется через SetInput
+                } else {
+                    // Это изменение другого игрока
+                    if (_enemies.ContainsKey(key)) {
+                        _enemies[key].SetCrouching(isCrouchingValue); // Вызов метода в EnemyController
+                    }
+                }
+                break; // Нашли нужное изменение, выходим из цикла
+            }
+        }
+    }
+
 }

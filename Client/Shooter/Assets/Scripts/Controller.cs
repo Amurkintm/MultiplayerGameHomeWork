@@ -33,14 +33,18 @@ public class Controller : MonoBehaviour
 
             bool space = Input.GetKeyDown(KeyCode.Space);
 
-            _player.SetInput(h, v, mouseX * _mouseSensetivity);
+            bool ctrl = Input.GetKey(KeyCode.LeftControl); // Проверяем, удерживается ли Ctrl
+
+            _player.SetInput(h, v, mouseX * _mouseSensetivity, ctrl);
             _player.RotateX(mouseY * -_mouseSensetivity);
             if (space) _player.Jump();
             if (isShoot && _gun.TryShoot(out ShootInfo shootInfo)) SendShoot(ref shootInfo);
+
             SendMove();
         } else {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+            _player.SetInput(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0, false);
         }
 
     }
@@ -62,7 +66,9 @@ public class Controller : MonoBehaviour
             {"vY", velocity.y},
             {"vZ", velocity.z},
             {"rX", rotateX},
-            {"rY", rotateY}
+            {"rY", rotateY},
+            // Добавляем isCrouching в сообщение move
+            {"isCrouching", _player.GetIsCrouching()} // Вызов метода PlayerCharacter
         };
         _multiplayerManager.SendMessаge("move", data);
     }
