@@ -16,7 +16,7 @@ public class EnemyController : MonoBehaviour
             for (int i = 0; i < receiveTimeIntervalCount; i++) {
                 summ += _receiveTimeInterval[i];
             }
-            return summ;
+            return summ / _receiveTimeInterval.Count;
         }
     }
     private float _lastReceiveTime = 0;
