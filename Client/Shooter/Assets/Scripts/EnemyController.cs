@@ -16,7 +16,7 @@ public class EnemyController : MonoBehaviour
             for (int i = 0; i < receiveTimeIntervalCount; i++) {
                 summ += _receiveTimeInterval[i];
             }
-            return summ / _receiveTimeInterval.Count;
+            return summ / receiveTimeIntervalCount;
         }
     }
     private float _lastReceiveTime = 0;
@@ -25,6 +25,7 @@ public class EnemyController : MonoBehaviour
     public void Init(Player player) {
         _player = player;
         _character.SetSpeed(player.speed);
+        _character.SetMaxHP(player.hp);
         player.OnChange += OnChange;
     }
     public void Shoot(in ShootInfo info) {

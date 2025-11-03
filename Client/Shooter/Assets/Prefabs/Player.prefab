@@ -67,6 +67,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01b79c692daad6548a37937afad5fc84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCharacter
+  <maxHealth>k__BackingField: 10
   <speed>k__BackingField: 7
   _rigidbody: {fileID: 2066320744216087072}
   _head: {fileID: 1701064763971444421}
@@ -171,6 +172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerGun
   _bulletPrefab: {fileID: 6990163353030923376, guid: 1f310ef436bb09b4f96536f8df4171e1, type: 3}
+  _damage: 1
   _bulletPoint: {fileID: 99953176579762566}
   _bulletSpeed: 30
   _shootDelay: 0.25
