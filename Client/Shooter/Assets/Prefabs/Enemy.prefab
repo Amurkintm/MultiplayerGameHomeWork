@@ -191,6 +191,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthUI
   _filledImage: {fileID: 8400359221576260363}
+  _defoultWidth: 2
 --- !u!1 &6037462526070524749
 GameObject:
   m_ObjectHideFlags: 0
@@ -202,7 +203,7 @@ GameObject:
   - component: {fileID: 4108886236794708668}
   - component: {fileID: 3347058863373070893}
   - component: {fileID: 1526614659303487978}
-  - component: {fileID: 402474509987772565}
+  - component: {fileID: 3975604126678487964}
   m_Layer: 0
   m_Name: BackgroundHP
   m_TagString: Untagged
@@ -268,7 +269,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1500
---- !u!114 &402474509987772565
+--- !u!114 &3975604126678487964
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

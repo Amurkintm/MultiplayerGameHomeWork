@@ -3,13 +3,11 @@ using UnityEngine;
 public class LookAtCamera : MonoBehaviour
 {
     private Transform _camera;
-    void Start()
-    {
+    void Start() {
         _camera = Camera.main.transform;
     }
-        
-    void Update()
-    {
-        transform.LookAt( _camera );
+
+    void Update() {
+        transform.LookAt(_camera);
     }
 }
