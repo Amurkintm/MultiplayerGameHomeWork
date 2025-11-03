@@ -22,10 +22,12 @@ public class EnemyController : MonoBehaviour
     private float _lastReceiveTime = 0;
     private Player _player;
 
-    public void Init(Player player) {
+    public void Init(string key, Player player) {
+        _character.Init(key);
+
         _player = player;
         _character.SetSpeed(player.speed);
-        _character.SetMaxHP(player.hp);
+        _character.SetMaxHP(player.maxHP);
         player.OnChange += OnChange;
     }
     public void Shoot(in ShootInfo info) {

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -7,6 +8,10 @@ public class EnemyCharacter : Character
     [SerializeField] private Health _health;
     public Vector3 targetPosition { get; private set; } = Vector3.zero;
     private float _velocityMagnitude = 0;
+    private string _sessionID;
+    public void Init(string sessionID) {
+        _sessionID = sessionID;
+    }
     
     private void Update() {
         if (_velocityMagnitude > .1f) {
@@ -38,6 +43,12 @@ public class EnemyCharacter : Character
 
     public void ApplyDamage(int damage) {
         _health.ApplyDamage(damage);
+        Dictionary<string, object> data = new Dictionary<string, object>()
+        {
+            {"id", _sessionID },
+            {"value", damage}
+        };
+        MultiplayerManager.Instance.SendMessage("damage", data);
     }
 
 }
