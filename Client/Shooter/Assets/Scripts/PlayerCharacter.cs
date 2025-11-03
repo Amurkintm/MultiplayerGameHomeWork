@@ -82,11 +82,6 @@ public class PlayerCharacter : Character
                 case "currentHP":
                     _health.SetCurrent((sbyte)dataChange.Value);
                     break;
-
-                default:
-                    Debug.LogWarning("Не обрабатывается изменение поля" + dataChange.Field);
-                    break;
-
             }
         }
     }
