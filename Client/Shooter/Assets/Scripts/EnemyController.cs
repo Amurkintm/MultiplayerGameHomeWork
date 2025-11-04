@@ -53,6 +53,14 @@ public class EnemyController : MonoBehaviour
         Vector3 velocity = _character.velocity;
         foreach (var dataChange in changes) {
             switch (dataChange.Field) {
+
+                case "loss":
+                    MultiplayerManager.Instance._lossCounter.SetEnemyLoss((byte)dataChange.Value);
+                    break;
+                case "currentHP":
+                    if ((sbyte)dataChange.Value > (sbyte)dataChange.PreviousValue)
+                        _character.RestoreHP((sbyte)dataChange.Value);
+                    break;
                 case "pX":
                     position.x = (float)dataChange.Value;
                     break;
@@ -72,10 +80,10 @@ public class EnemyController : MonoBehaviour
                     velocity.z = (float)dataChange.Value;
                     break;
                 case "rX":
-                    _character.SetRotateX ((float)dataChange.Value);
+                    _character.SetRotateX((float)dataChange.Value);
                     break;
                 case "rY":
-                    _character.SetRotateY ((float)dataChange.Value);
+                    _character.SetRotateY((float)dataChange.Value);
                     break;
                 default:
                     Debug.LogWarning("Не обрабатывается изменение поля" + dataChange.Field);
@@ -84,5 +92,6 @@ public class EnemyController : MonoBehaviour
             }
         }
         _character.SetMovement(position, velocity, AverageInterval);
+
     }
 }

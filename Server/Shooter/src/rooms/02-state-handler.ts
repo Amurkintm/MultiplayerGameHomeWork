@@ -2,6 +2,9 @@ import { Room, Client } from "colyseus";
 import { Schema, type, MapSchema } from "@colyseus/schema";
 
 export class Player extends Schema {
+    @type("uint8")
+    loss = 0;
+
     @type("int8")
     maxHP = 0;
 
@@ -15,7 +18,7 @@ export class Player extends Schema {
     pX = Math.floor(Math.random() * 50) -25;
 
     @type("number")
-    pY = 0;
+    pY = 1;
 
     @type("number")
     pZ = Math.floor(Math.random() * 50) -25;
@@ -24,7 +27,7 @@ export class Player extends Schema {
     vX = 0;
 
     @type("number")
-    vY = 0;
+    vY = 1;
 
     @type("number")
     vZ = 0;
@@ -70,7 +73,7 @@ export class State extends Schema {
 }
 
 export class StateHandlerRoom extends Room<State> {
-    maxClients = 4;
+    maxClients = 2;
 
     onCreate (options) {
         console.log("StateHandlerRoom created!", options);
@@ -83,11 +86,33 @@ export class StateHandlerRoom extends Room<State> {
             this.state.movePlayer(client.sessionId, data);
         });
         this.onMessage("shoot", (client, data) => {
+
             this.broadcast("Shoot", data, {except: client});
         });
         this.onMessage("damage", (client, data) => {
-            const player = this.state.players.get(data.id);
-            player.currentHP -= data.value;
+            const clientID = data.id;
+            const player = this.state.players.get(clientID);
+            
+            let hp = player.currentHP - data.value;
+            
+            if(hp > 0){
+                player.currentHP = hp;
+                return;
+            }
+            
+            player.loss++;
+            player.currentHP = player.maxHP;
+
+            for(var i = 0; i < this.clients.length; i++){
+
+                if(this.clients[i].id != clientID) continue;
+
+                const x = Math.floor(Math.random() * 50) -25;
+                const z = Math.floor(Math.random() * 50) -25;
+                
+                const message = JSON.stringify({x,z});
+                this.clients[i].send("restart", message);
+            }
         });
 
     }
@@ -97,6 +122,7 @@ export class StateHandlerRoom extends Room<State> {
     }
 
     onJoin (client: Client, data: any) {
+        if(this.clients.length > 1) this.lock();
         client.send("hello", "world");
         this.state.createPlayer(client.sessionId, data);
     }

@@ -1,5 +1,4 @@
 using Colyseus;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +6,7 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager>
 {
     [SerializeField] private PlayerCharacter _player;
     [SerializeField] private EnemyController _enemy;
+    [field: SerializeField] public LossCounter _lossCounter { get; private set; }
 
     private ColyseusRoom<State> _room;
     private Dictionary<string, EnemyController> _enemies = new Dictionary<string, EnemyController>();
@@ -26,6 +26,8 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager>
         _room = await Instance.client.JoinOrCreate<State>("state_handler", data);
         _room.OnStateChange += OnChange;
         _room.OnMessage<string>("Shoot", ApplyShoot);
+        
+
     }
 
     private void ApplyShoot(string jsonShootInfo) {
@@ -54,6 +56,7 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager>
         var position = new Vector3(player.pX, player.pY, player.pZ);
         var playerCharacter = Instantiate(_player, position, Quaternion.identity);
         player.OnChange += playerCharacter.OnChange;
+        _room.OnMessage<string>("restart", playerCharacter.GetComponent<Controller>().Restart);
     }
 
 
@@ -82,10 +85,10 @@ public class MultiplayerManager : ColyseusManager<MultiplayerManager>
         _room.Leave();
 
     }
-    public void SendMessаge(string key, Dictionary<string, object> data) {
+    public void Send(string key, Dictionary<string, object> data) {
         _room.Send(key, data);
     }
-    public void SendMessаge(string key, string data) {
+    public void Send(string key, string data) {
         _room.Send(key, data);
     }
     public string GetSessionID() => _room.SessionId;

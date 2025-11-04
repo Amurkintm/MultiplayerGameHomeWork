@@ -26,6 +26,10 @@ public class EnemyCharacter : Character
         maxHealth = value;
         _health.SetMax(value);
         _health.SetCurrent(value);
+
+    }
+    public void RestoreHP(int newValue) {
+        _health.SetCurrent(newValue);
     }
 
     public void SetMovement(in Vector3 position, in Vector3 velocity, in float averageinterval) {
@@ -48,7 +52,7 @@ public class EnemyCharacter : Character
             {"id", _sessionID },
             {"value", damage}
         };
-        MultiplayerManager.Instance.SendMessage("damage", data);
+        MultiplayerManager.Instance.Send("damage", data);
     }
 
 }
