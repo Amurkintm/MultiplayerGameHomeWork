@@ -7,7 +7,7 @@ public class LookAtCamera : MonoBehaviour
         _camera = Camera.main.transform;
     }
 
-    void Update() {
+    void LateUpdate() {
         transform.LookAt(_camera);
     }
 }
