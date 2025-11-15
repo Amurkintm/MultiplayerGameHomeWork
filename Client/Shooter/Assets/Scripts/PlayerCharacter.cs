@@ -53,7 +53,6 @@ public class PlayerCharacter : Character
     public void RotateX(float value) {
         _currentRotateX = Mathf.Clamp(_currentRotateX + value, _minHeadAngle, _maxHeadAngle);
         _head.localEulerAngles = new Vector3(_currentRotateX, 0, 0);
-        //_head.Rotate(value,0,0);
     }
     public void RotateY() {
         _rigidbody.angularVelocity = new Vector3(0, _rotateY, 0);
