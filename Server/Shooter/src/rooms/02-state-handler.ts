@@ -3,7 +3,7 @@ import { Schema, type, MapSchema } from "@colyseus/schema";
 
 export class Player extends Schema {
     @type("uint8")
-    loss = 2;
+    loss = 23;
 
     @type("int8")
     maxHP = 0;
