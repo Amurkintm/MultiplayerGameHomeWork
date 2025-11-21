@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-      - BuildHome3Week
+      - origin/BuildHome3Week
 
 jobs:
   deploy:
