@@ -3,7 +3,7 @@ import { Schema, type, MapSchema } from "@colyseus/schema";
 
 export class Player extends Schema {
     @type("uint8")
-    loss = 0;
+    loss = 2;
 
     @type("int8")
     maxHP = 0;
@@ -75,18 +75,6 @@ export class State extends Schema {
         player.rX = data.rX;
         player.rY = data.rY;             
     }
-
-    respawnPlayer(sessionId: string, spawnPoint: { x: number, y: number, z: number }) {
-        const player = this.players.get(sessionId);
-        if (!player) return;
-        
-        player.currentHP = player.maxHP;
-        player.pX = spawnPoint.x;
-        player.pY = spawnPoint.y;
-        player.pZ = spawnPoint.z;
-        player.rY = 0; // или другое значение по умолчанию
-    }
-
 }
 
 export class StateHandlerRoom extends Room<State> {
